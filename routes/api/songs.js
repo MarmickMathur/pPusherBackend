@@ -19,10 +19,11 @@ router.get("/", async (req, res) => {
   res.send("songs route");
 });
 
-router.get("/add", verifyToken, async (req, res) => {
+router.post("/add", verifyToken, async (req, res) => {
   const uid = req.user.uid;
   const data = req.body;
   console.log(data);
+
   try {
     const profile = await Profile.findOne({ user: uid });
     if (!profile) {
@@ -45,26 +46,43 @@ router.get("/add", verifyToken, async (req, res) => {
   }
 });
 
-router.get("/like/:id", verifyToken, async (req, res) => {
+router.post("/like/:name", verifyToken, async (req, res) => {
   const uid = req.user.uid;
-  const objid = new ObjectId(req.params);
   try {
-    const profile = Profile.findOne({ user: uid }).populate();
-
+    const profile = await Profile.findOne({ user: uid });
+    const foundsong = await Song.findOne({ name: req.params.name });
     if (!profile) {
       return res.status(400).json({ msg: "no profile" });
     }
-    const chk = await Profile.findOne({
-      user: uid,
-      liked: objid,
-    });
-    console.log(chk);
-    if (chk) {
-      return res.json({ msg: "already liked" });
+    if (!foundsong) {
+      return res.json({ msg: "no such song" });
     }
 
-    const song = await Song.findByIdAndUpdate(
-      objid,
+    const chk = await Profile.findOne({
+      user: uid,
+      liked: foundsong,
+    });
+
+    console.log(chk);
+    if (chk) {
+      console.log("inhere disliking now");
+      const foundsong = await Song.findOneAndUpdate(
+        { name: req.params.name },
+        { $inc: { likes: -1 } },
+        { new: true }
+      );
+      console.log(foundsong);
+      const songId = foundsong._id;
+      await Profile.findOneAndUpdate(
+        { user: uid },
+        { $pull: { liked: songId } },
+        { new: true }
+      );
+      return res.json({ msg: "seccussfully disliked" });
+    }
+
+    const song = await Song.findOneAndUpdate(
+      { name: req.params.name },
       { $inc: { likes: 1 } },
       { new: true }
     );
@@ -81,6 +99,23 @@ router.get("/like/:id", verifyToken, async (req, res) => {
   }
 });
 
-router.get("/", (req, res) => res.send("songs route"));
+router.get("/fetch/:name", verifyToken, async (req, res) => {
+  console.log(req.params.name);
+  //   res.send(req.params.name);
+  try {
+    const foundsong = await Song.findOne({ name: req.params.name });
+    console.log(foundsong);
+    if (!foundsong) {
+      return res.json({ msg: "no such song" });
+    }
+    console.log(foundsong);
+    return res.json(foundsong);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("server error");
+  }
+});
+
+// router.get("/", (req, res) => res.send("songs route"));
 
 module.exports = router;
