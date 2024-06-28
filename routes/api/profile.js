@@ -57,28 +57,4 @@ router.get("/view/:id", verifyToken, async (req, res) => {
   }
 });
 
-router.post("/", verifyToken, async (req, res) => {
-  try {
-    let profile = await Profile.findOne({ user: req.user.uid });
-
-    if (!profile) {
-      return res.status(400).json({ msg: "noprofile" });
-    }
-    const { friends } = req.body;
-    profile = await Profile.findOneAndUpdate(
-      {
-        user: req.user.uid,
-      },
-      { $set: friends },
-      {
-        new: true,
-      }
-    );
-    res.json(profile);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("server error");
-  }
-});
-
 module.exports = router;
