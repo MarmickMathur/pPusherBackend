@@ -7,12 +7,13 @@ const verifyToken = require("../../middleware/auth");
 router.get("/me", verifyToken, async (req, res) => {
   try {
     console.log(req.user);
-    const profile = await Profile.findOne({ user: req.user.uid }).populate({
-      path: "friends",
-    });
-    // .populate({ path: "song", options: { strict: false } })
-    // .populate({ path: "liked", options: { strict: false } })
-    // .populate({ path: "favsong", options: { strict: false } });
+    const profile = await Profile.findOne({ user: req.user.uid })
+      .populate({
+        path: "friends",
+      })
+      .populate("songs")
+      .populate("liked")
+      .populate("favsong");
     if (!profile) {
       return res.status(400).json({ msg: "no profile" });
     }

@@ -9,6 +9,11 @@ const SongSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "profile",
+    required: true,
+  },
   time: {
     type: Date,
     default: Date.now,
