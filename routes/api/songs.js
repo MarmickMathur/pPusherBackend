@@ -29,7 +29,7 @@ router.post("/add", verifyToken, async (req, res) => {
       return res.status(400).json({ msg: "no profile" });
     }
     const chk = Song.findOne({ name: data.name });
-    if (ckh) {
+    if (chk) {
       return res.json({ msg: "name already exist" });
     }
     const song = new Song({
@@ -106,7 +106,9 @@ router.get("/fetch/:name", verifyToken, async (req, res) => {
   console.log(req.params.name);
   //   res.send(req.params.name);
   try {
-    const foundsong = await Song.findOne({ name: req.params.name }).populate("owner");
+    const foundsong = await Song.findOne({ name: req.params.name }).populate(
+      "owner"
+    );
     console.log(foundsong);
     if (!foundsong) {
       return res.json({ msg: "no such song" });
