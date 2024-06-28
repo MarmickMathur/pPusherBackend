@@ -33,7 +33,7 @@ router.post("/add", verifyToken, async (req, res) => {
     if (profile) {
       return res.json({ msg: "profile already exists" });
     }
-    profile = new Profiles({
+    profile = new Profile({
       user: req.user.uid,
       name: req.user.name,
     });

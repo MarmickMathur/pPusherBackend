@@ -15,7 +15,7 @@ admin.initializeApp({
 const verifyToken = async (req, res, next) => {
   // console.log(req.headers);
   const token = req.headers["accesstoken"]; // Assuming the token is in the 'accesstoken' header
-  console.log(token);
+  // console.log(token);
   if (!token) {
     return res.status(403).send("Access Token is required");
   }
