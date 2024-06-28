@@ -106,7 +106,7 @@ router.get("/fetch/:name", verifyToken, async (req, res) => {
   console.log(req.params.name);
   //   res.send(req.params.name);
   try {
-    const foundsong = await Song.findOne({ name: req.params.name });
+    const foundsong = await Song.findOne({ name: req.params.name }).populate("owner");
     console.log(foundsong);
     if (!foundsong) {
       return res.json({ msg: "no such song" });
