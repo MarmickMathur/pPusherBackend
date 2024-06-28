@@ -28,10 +28,11 @@ router.post("/add", verifyToken, async (req, res) => {
     if (!profile) {
       return res.status(400).json({ msg: "no profile" });
     }
-    const chk = Song.findOne({ name: data.name });
+    const chk = await Song.findOne({ name: data.name });
     if (chk) {
       return res.json({ msg: "name already exist" });
     }
+
     const song = new Song({
       name: data.name,
       owner: profile,
