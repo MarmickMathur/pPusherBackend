@@ -10,7 +10,13 @@ router.get("/me", verifyToken, async (req, res) => {
       .populate({
         path: "friends",
       })
-      .populate("songs")
+      .populate({
+        path: "songs",
+        populate: {
+          path: "owner",
+          model: "profile",
+        },
+      })
       .populate("liked")
       .populate("favsong");
     if (!profile) {
