@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const Profile = require("../../modals/Profiles");
-// const Profiles = require("../../modals/Profiles");
 const verifyToken = require("../../middleware/auth");
 
 router.get("/me", verifyToken, async (req, res) => {
@@ -60,7 +59,7 @@ router.get("/view/:id", verifyToken, async (req, res) => {
 
 router.post("/", verifyToken, async (req, res) => {
   try {
-    let profile = await Profiles.findOne({ user: req.user.uid });
+    let profile = await Profile.findOne({ user: req.user.uid });
 
     if (!profile) {
       return res.status(400).json({ msg: "noprofile" });

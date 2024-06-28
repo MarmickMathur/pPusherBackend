@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const Song = require("../../modals/songs.js");
+const Song = require("../../modals/Songs.js");
 const Profile = require("../../modals/Profiles");
 const { ObjectId } = require("mongodb");
-
 const verifyToken = require("../../middleware/auth");
 const { connection } = require("mongoose");
 
@@ -62,8 +61,6 @@ router.get("/like/:id", verifyToken, async (req, res) => {
     console.log(chk);
     if (chk) {
       return res.json({ msg: "already liked" });
-    }
-    if (profile.liked.$contains) {
     }
 
     const song = await Song.findByIdAndUpdate(
