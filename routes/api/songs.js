@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Song = require("../../modals/songs.js");
 const Profile = require("../../modals/Profiles");
-const { MongoClient, ObjectId } = require("mongodb");
+const { ObjectId } = require("mongodb");
 
 const verifyToken = require("../../middleware/auth");
 
