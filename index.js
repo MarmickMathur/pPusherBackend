@@ -6,7 +6,7 @@ const app = express();
 
 // Keep-alive functionality
 const keepServerActive = () => {
-  fetch("https://nodemailerapi-0cfa.onrender.com/email/keep-alive", {
+  fetch("https://nodemailerapi-0cfa.onrender.com/keep-alive", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
